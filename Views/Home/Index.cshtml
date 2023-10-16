@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Home Page - File Upload to S3";
+}
+<script>
+    function updateFileTypes() {
+        
+        var dropdown = document.getElementById("drpfileList");
+        var fileInput = document.getElementById("file");
+
+        // Get the selected option value
+        var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+
+        // Set the accepted file types based on the selected option
+        switch (selectedOption) {
+            case "Json":
+                fileInput.accept = ".json";
+                break;
+            case "Video":
+                fileInput.accept = ".mp4, .avi, .mkv"; // Update with the appropriate video formats
+                break;
+            case "Vtt":
+                fileInput.accept = ".vtt";
+                break;
+            default:
+                fileInput.accept = ""; // Allow all file types if none is selected
+        }
+    }
+</script>
+
+<form enctype="multipart/form-data" method="post" asp-controller="Home" asp-action="UploadFileToS3">
+    <dl>
+        <dt style="margin-bottom: 20px">
+            <label>Curator Uploads</label>
+        </dt>
+        <dd>
+            <label>Select Upload Type</label><br />
+            <select id="drpfileList" class="form-control" style="width:20%" onchange="updateFileTypes()">
+                <option value="Json">Json</option>
+                <option value="Video">Video</option>
+                <option value="Vtt">Vtt</option>
+            </select>
+        </dd>
+        <br />
+        <dd>
+            <input type="file" name="file" id="file" accept=".json">
+        </dd>
+    </dl>
+    <input class="btn btn-success" type="submit" value="Upload File" />
+    
+</form>
+
+@if (ViewBag.Success != null)
+{
+    <div>@ViewBag.Success</div>
+}
